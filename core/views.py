@@ -3,9 +3,13 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
+<<<<<<< HEAD
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum, Count
 from accounts.models import User
+=======
+from django.contrib.auth.mixins import LoginRequiredMixin
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
 from campaigns.models import Campaign, Category, CampaignProof
 from campaigns.forms import CampaignForm, CampaignProofForm
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm
@@ -15,7 +19,26 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+<<<<<<< HEAD
         context['trending_campaigns'] = Campaign.objects.filter(status=Campaign.Status.ACTIVE).order_by('-raised_amount')[:3]
+=======
+        context['trending_campaigns'] = Campaign.objects.filter(
+            status=Campaign.Status.ACTIVE, approved=True
+        ).order_by('-raised_amount')[:3]
+        return context
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'category_detail.html'
+    context_object_name = 'category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campaigns'] = self.object.campaigns.filter(
+            status=Campaign.Status.ACTIVE,
+            approved=True
+        ).order_by('-raised_amount')
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
         return context
 
 class LoginView(AuthLoginView):
@@ -84,6 +107,7 @@ class CreateCampaignView(LoginRequiredMixin, CreateView):
 
             return redirect('campaign_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
+<<<<<<< HEAD
 
 class AdminDashboardView(UserPassesTestMixin, TemplateView):
     template_name = 'admin/dashboard.html'
@@ -106,3 +130,5 @@ class AdminDashboardView(UserPassesTestMixin, TemplateView):
         ).order_by('-total_raised')
         
         return context
+=======
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852

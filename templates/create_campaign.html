@@ -35,6 +35,7 @@
                         </div>
 
                         <div class="row">
+<<<<<<< HEAD
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold">Category</label>
                                 <select name="category" class="form-select bg-light border-0 py-2" required>
@@ -53,6 +54,14 @@
                                 {% if form.goal_amount.errors %}<div class="text-danger small">{{ form.goal_amount.errors }}</div>{% endif %}
                             </div>
                             <div class="col-md-4 mb-3">
+=======
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Target Goal ($)</label>
+                                <input type="number" step="0.01" class="form-control bg-light border-0 py-2" name="goal_amount" required value="{{ form.goal_amount.value|default:'' }}">
+                                {% if form.goal_amount.errors %}<div class="text-danger small">{{ form.goal_amount.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
                                 <label class="form-label fw-bold">Location</label>
                                 <input type="text" class="form-control bg-light border-0 py-2" name="location" value="{{ form.location.value|default:'' }}">
                                 {% if form.location.errors %}<div class="text-danger small">{{ form.location.errors }}</div>{% endif %}
@@ -64,7 +73,19 @@
                             <input class="form-control bg-light border-0" type="file" name="image" accept="image/*">
                         </div>
 
+<<<<<<< HEAD
                         <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">2. Verification Proofs</h5>
+=======
+                        <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">2. Payment details (QR Code)</h5>
+                        <p class="small text-muted-custom">Upload your UPI or Bank QR code so that donors can pay you directly if needed natively.</p>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Payment QR Code</label>
+                            <input class="form-control bg-light border-0" type="file" name="payment_qr_code" accept="image/*">
+                            {% if form.payment_qr_code.errors %}<div class="text-danger small">{{ form.payment_qr_code.errors }}</div>{% endif %}
+                        </div>
+
+                        <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">3. Verification Proofs</h5>
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
                         <p class="small text-muted-custom">To establish trust, provide a medical estimate, ID proof, or other documentation. Internal use and donor verification only.</p>
                         <div class="row">
                             <div class="col-md-6 mb-3">
