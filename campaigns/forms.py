@@ -4,7 +4,7 @@ from .models import Campaign, CampaignProof
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ('title', 'description', 'goal_amount', 'category', 'location', 'image', 'payment_qr_code')
+        fields = ('title', 'description', 'goal_amount', 'category', 'location', 'image')
         widgets = {
             'description': forms.Textarea(attrs={'rows': 5}),
         }

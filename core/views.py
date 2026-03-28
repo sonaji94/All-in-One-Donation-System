@@ -3,7 +3,9 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Sum, Count
+from accounts.models import User
 from campaigns.models import Campaign, Category, CampaignProof
 from campaigns.forms import CampaignForm, CampaignProofForm
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm
@@ -82,3 +84,25 @@ class CreateCampaignView(LoginRequiredMixin, CreateView):
 
             return redirect('campaign_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
+
+class AdminDashboardView(UserPassesTestMixin, TemplateView):
+    template_name = 'admin/dashboard.html'
+
+    def test_func(self):
+        return self.request.user.is_authenticated and (self.request.user.is_admin_role() or self.request.user.is_superuser)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Calculate totals
+        context['total_collected'] = Campaign.objects.aggregate(total=Sum('raised_amount'))['total'] or 0
+        context['total_campaigns'] = Campaign.objects.count()
+        context['total_users'] = User.objects.count()
+        
+        # Seekers (users who have created campaigns)
+        context['seekers'] = User.objects.filter(campaigns__isnull=False).distinct().annotate(
+            total_raised=Sum('campaigns__raised_amount'),
+            campaign_count=Count('campaigns')
+        ).order_by('-total_raised')
+        
+        return context

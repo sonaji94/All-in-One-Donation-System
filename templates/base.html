@@ -51,7 +51,10 @@
                                 <i class="fa-regular fa-user me-2"></i> {{ user.username }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                                <li><a class="dropdown-item fw-semibold py-2" href="#"><i class="fa-solid fa-chart-line me-2 text-primary"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line me-2 text-primary"></i> Dashboard</a></li>
+                                {% if user.is_admin_role or user.is_superuser %}
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-chart-pie me-2 text-warning"></i> Admin Dashboard</a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="post" action="{% url 'logout' %}" class="d-inline">

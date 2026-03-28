@@ -11,7 +11,7 @@
                 <h1 class="fw-bold mb-1">Welcome back, {{ user.username }}!</h1>
                 <p class="text-muted-custom mb-0">Manage your active campaigns and track your impact.</p>
             </div>
-            <a href="#" class="btn btn-primary-custom rounded-pill fw-bold shadow-sm d-flex align-items-center">
+            <a href="{% url 'create_campaign' %}" class="btn btn-primary-custom rounded-pill fw-bold shadow-sm d-flex align-items-center">
                 <i class="fa-solid fa-plus me-2"></i> New Campaign
             </a>
         </div>
@@ -46,28 +46,39 @@
                 <div class="tab-pane fade show active" id="campaigns-tab" role="tabpanel" aria-labelledby="campaigns-nav">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                         <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold mb-0">Active Campaigns (<span class="text-secondary">1</span>)</h5>
-                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">+ Create</a>
+                            <h5 class="fw-bold mb-0">Active Campaigns (<span class="text-secondary">{{ my_campaigns.count|default:"0" }}</span>)</h5>
+                            <a href="{% url 'create_campaign' %}" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">+ Create</a>
                         </div>
                         <div class="card-body p-4">
-                            <!-- Iterating through users campaigns here later -->
+                            {% for campaign in my_campaigns %}
                             <div class="row align-items-center border rounded-4 p-3 mb-3 shadow-sm bg-light">
                                 <div class="col-md-2 col-4 mb-3 mb-md-0">
-                                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=200&auto=format&fit=crop" class="img-fluid rounded-3 object-fit-cover shadow-sm" alt="Campaign Thumbnail">
+                                    {% if campaign.image %}
+                                    <img src="{{ campaign.image.url }}" class="img-fluid rounded-3 object-fit-cover shadow-sm" style="height: 80px; width: 100%" alt="Campaign Thumbnail">
+                                    {% else %}
+                                    <div class="bg-secondary-subtle rounded-3 d-flex align-items-center justify-content-center h-100" style="min-height: 80px;">
+                                        <i class="fa-solid fa-image text-muted fs-3"></i>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-5 col-8">
-                                    <h5 class="fw-bold mb-1"><a href="/campaign/1" class="text-decoration-none text-dark">Emergency Relief for City Animal Shelter</a></h5>
-                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-2 py-1 small fw-semibold">Active</span>
+                                    <h5 class="fw-bold mb-1"><a href="{% url 'campaign_detail' campaign.pk %}" class="text-decoration-none text-dark">{{ campaign.title }}</a></h5>
+                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-2 py-1 small fw-semibold">{{ campaign.get_status_display }}</span>
                                 </div>
                                 <div class="col-md-3 col-6 text-md-center">
-                                    <h4 class="mb-0 fw-bold">₹1,50,000</h4>
-                                    <span class="text-muted-custom small fw-semibold letter-spacing text-uppercase d-block mt-1">Raised of ₹5,00,000</span>
+                                    <h4 class="mb-0 fw-bold">₹{{ campaign.raised_amount }}</h4>
+                                    <span class="text-muted-custom small fw-semibold letter-spacing text-uppercase d-block mt-1">Raised of ₹{{ campaign.goal_amount }}</span>
                                 </div>
                                 <div class="col-md-2 col-6 text-end">
                                     <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px;" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                     <button class="btn btn-outline-danger btn-sm rounded-circle shadow-sm ms-1" style="width: 32px; height: 32px;" title="Stop"><i class="fa-solid fa-power-off"></i></button>
                                 </div>
                             </div>
+                            {% empty %}
+                            <div class="text-center py-4">
+                                <p class="text-muted-custom mb-0">You haven't created any campaigns yet.</p>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
