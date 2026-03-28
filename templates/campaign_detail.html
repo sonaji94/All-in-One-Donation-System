@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ campaign.title }} | EduNet NextGen{% endblock %}
+
+{% block content %}
+<div class="row pt-5 bg-white border-bottom shadow-sm">
+    <div class="container pb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="col-12 mb-4">
+                    <span class="badge bg-secondary mb-2 rounded-pill px-3">{{ campaign.category.name }}</span>
+                    {% if campaign.proofs.exists %}
+                    <span class="badge bg-success mb-2 rounded-pill px-3 ms-2"><i class="fa-solid fa-shield-check"></i>
+                        Has Verification Proofs</span>
+                    {% endif %}
+                    <h1 class="fw-bolder display-5 mb-3">{{ campaign.title }}</h1>
+                    <div class="d-flex align-items-center text-muted-custom">
+                        <img src="https://ui-avatars.com/api/?name={{ campaign.owner.username }}&background=E5E7EB&color=374151"
+                            alt="Organizer" class="rounded-circle me-2" width="40" height="40">
+                        <span class="me-3">Organized by <strong class="text-dark">{{ campaign.owner.username
+                                }}</strong></span>
+                        <span class="me-3"><i class="fa-regular fa-clock me-1"></i> {{ campaign.created_at|timesince }}
+                            ago</span>
+                        {% if campaign.location %}
+                        <span><i class="fa-solid fa-location-dot me-1"></i> {{ campaign.location }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <!-- Example Image Carousel -->
+                <div class="rounded-4 overflow-hidden shadow-lg position-relative" style="height: 400px;">
+                    <img src="https://images.unsplash.com/photo-1538356111053-748a48e1acb8?q=80&w=1200"
+                        alt="Campaign Banner" class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <ul class="nav nav-tabs fw-semibold mb-4" id="campaignTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active text-dark" id="story-tab" data-bs-toggle="tab"
+                        data-bs-target="#story" type="button" role="tab" aria-selected="true">Story</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-dark" id="updates-tab" data-bs-toggle="tab" data-bs-target="#updates"
+                        type="button" role="tab" aria-selected="false">Updates <span
+                            class="badge bg-secondary rounded-pill ms-1">2</span></button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="campaignTabsContent">
+                <div class="tab-pane fade show active" id="story" role="tabpanel" tabindex="0">
+                    <div class="content text-muted-custom fs-5 lh-lg">
+                        <p>Hi everyone,</p>
+                        <p>It breaks our heart to share that our beloved colleague and friend, John, has been diagnosed
+                            with Leukemia. For the last 15 years, he has dedicated his life to teaching underprivileged
+                            children in our community.</p>
+                        <p>John's treatment will take approximately 8 months. During this time, he will be unable to
+                            work. We are aiming to raise ₹50,00,000 to cover his living expenses and the mounting
+                            medical bills not covered by his insurance plan.</p>
+                        <p><strong>Any amount you can donate—whether it's ₹500 or ₹5000—makes a huge
+                                difference.</strong> If you cannot donate, please share this campaign with your network.
+                        </p>
+                        <p>Thank you for your kindness!</p>
+                    </div>
+                </div>
+                <!-- Add updates tab content -->
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Donation Sidebar Widget -->
+            <div class="card glass-panel border-0 mb-4 sticky-top" style="top: 100px;">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-bold text-dark mb-1">₹{{ campaign.raised_amount }} <span
+                            class="text-muted-custom fs-6 fw-normal">raised of ₹{{ campaign.goal_amount }} goal</span>
+                    </h3>
+                    <div class="progress-custom mb-3 mt-3">
+                        <div class="progress-bar-custom" role="progressbar"
+                            style="width: {{ campaign.progress_percentage }}%;"
+                            aria-valuenow="{{ campaign.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+
+                    {% if campaign.payment_qr_code %}
+                    <div class="border rounded-4 p-3 bg-white shadow-sm mb-4">
+                        <span class="d-block text-muted-custom small fw-bold text-uppercase letter-spacing mb-2"><i
+                                class="fa-solid fa-qrcode text-secondary"></i> Direct Payment QR</span>
+                        <img src="{{ campaign.payment_qr_code.url }}" alt="Campaign QR Code"
+                            class="img-fluid rounded-3 mb-2" style="max-height: 200px;">
+                        <p class="small text-muted-custom mb-0">Scan using any UPI app</p>
+                    </div>
+                    {% endif %}
+
+                    <p class="text-muted-custom small fw-semibold mb-3">
+                        <i class="fa-solid fa-users text-primary me-1"></i> {{ campaign.donations.count }} Donors
+                    </p>
+
+                    <button
+                        class="btn btn-primary-custom w-100 py-3 rounded-pill fw-bold text-uppercase letter-spacing mb-3 shadow"
+                        data-bs-toggle="modal" data-bs-target="#donationModal">
+                        Donate via Stripe
+                    </button>
+                    <button
+                        class="btn btn-outline-dark w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-share-nodes me-2"></i> Share Campaign
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donation Checkout Modal -->
+<div class="modal fade" id="donationModal" tabindex="-1" aria-labelledby="donationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5 pt-3 pb-5 text-center">
+                <div class="mb-4">
+                    <h3 class="fw-bold">Secure Donation</h3>
+                    <p class="text-muted-custom small">You are supporting "John's Battle with Leukemia"</p>
+                </div>
+
+                <form id="donationForm">
+                    {% csrf_token %}
+                    <!-- Amount selection -->
+                    <div class="d-flex justify-content-between gap-2 mb-4">
+                        <input type="radio" class="btn-check" name="amount" id="btn-500" autocomplete="off" value="500">
+                        <label class="btn btn-outline-primary fw-bold w-100 py-2 border-2 rounded-3"
+                            for="btn-500">₹500</label>
+
+                        <input type="radio" class="btn-check" name="amount" id="btn-1000" autocomplete="off"
+                            value="1000" checked>
+                        <label class="btn btn-outline-primary fw-bold w-100 py-2 border-2 rounded-3"
+                            for="btn-1000">₹1000</label>
+
+                        <input type="radio" class="btn-check" name="amount" id="btn-2500" autocomplete="off"
+                            value="2500">
+                        <label class="btn btn-outline-primary fw-bold w-100 py-2 border-2 rounded-3"
+                            for="btn-2500">₹2500</label>
+
+                        <input type="radio" class="btn-check" name="amount" id="btn-5000" autocomplete="off"
+                            value="5000">
+                        <label class="btn btn-outline-primary fw-bold w-100 py-2 border-2 rounded-3"
+                            for="btn-5000">₹5000</label>
+                    </div>
+
+                    <!-- Custom Amount -->
+                    <div class="input-group mb-4">
+                        <span class="input-group-text bg-white border-end-0 fw-bold border-2 text-muted-custom"><i
+                                class="fa-solid fa-indian-rupee-sign"></i></span>
+                        <input type="number" class="form-control border-start-0 border-2 py-2 fw-bold" id="customAmount"
+                            placeholder="Custom Amount">
+                    </div>
+
+                    <hr class="my-4 border-light">
+
+                    <button type="button" id="submitDonation"
+                        class="btn btn-primary-custom w-100 py-3 fw-bold rounded-pill shadow d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-lock me-2"></i> Continue to Payment
+                    </button>
+                    <p class="text-muted-custom small mt-3"><i
+                            class="fa-brands fa-stripe fs-3 text-secondary alignment-baseline"></i> Guaranteed safe and
+                        secure checkout using Stripe.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const donationForm = document.getElementById('donationForm');
+        const submitBtn = document.getElementById('submitDonation');
+        const customAmountInput = document.getElementById('customAmount');
+
+        submitBtn.addEventListener('click', async function () {
+            // Get amount
+            let amount = 0;
+            if (customAmountInput.value && customAmountInput.value > 0) {
+                amount = customAmountInput.value;
+            } else {
+                const selectedRadio = document.querySelector('input[name="amount"]:checked');
+                if (selectedRadio) {
+                    amount = selectedRadio.value;
+                }
+            }
+
+            if (!amount || amount <= 0) {
+                alert('Please select or enter a valid donation amount.');
+                return;
+            }
+
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            try {
+                // Disable button and show loading state
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Processing...';
+                submitBtn.disabled = true;
+
+                // 1. Create Donation Record
+                const donationResponse = await fetch('/api/donations/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        campaign: {{ campaign.id }}
+                    })
+    });
+
+    if (!donationResponse.ok) {
+        const errorData = await donationResponse.json();
+        throw new Error(errorData.detail || 'Failed to create donation record.');
+    }
+
+    const donationData = await donationResponse.json();
+
+    // 2. Create Stripe Checkout Session
+    const stripeResponse = await fetch('/api/payments/create-checkout-session/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            donation_id: donationData.id
+        })
+    });
+
+    if (!stripeResponse.ok) {
+        const errorData = await stripeResponse.json();
+        throw new Error(errorData.error || 'Failed to initialize payment.');
+    }
+
+    const stripeData = await stripeResponse.json();
+
+    // 3. Redirect to Stripe
+    if (stripeData.url) {
+        window.location.href = stripeData.url;
+    } else {
+        throw new Error('No checkout URL received.');
+    }
+
+            } catch (error) {
+        alert('Error: ' + error.message);
+        // Reset button
+        submitBtn.innerHTML = '<i class="fa-solid fa-lock me-2"></i> Continue to Payment';
+        submitBtn.disabled = false;
+    }
+        });
+    });
+</script>
+{% endblock %}

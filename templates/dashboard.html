@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard | EduNet NextGen{% endblock %}
+
+{% block content %}
+<div class="row pt-5 bg-light border-bottom shadow-sm">
+    <div class="container pb-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fw-bold mb-1">Welcome back, {{ user.username }}!</h1>
+                <p class="text-muted-custom mb-0">Manage your active campaigns and track your impact.</p>
+            </div>
+            <a href="#" class="btn btn-primary-custom rounded-pill fw-bold shadow-sm d-flex align-items-center">
+                <i class="fa-solid fa-plus me-2"></i> New Campaign
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-0">
+                    <div class="nav flex-column nav-pills list-group list-group-flush rounded-4 overflow-hidden py-2 cursor-pointer" id="dashboard-tabs" role="tablist" aria-orientation="vertical">
+                        <button class="nav-link text-start rounded-0 py-3 active fw-bold border-0" id="campaigns-nav" data-bs-toggle="pill" data-bs-target="#campaigns-tab" type="button" role="tab" aria-controls="campaigns-tab" aria-selected="true">
+                            <i class="fa-solid fa-layer-group me-3 w-20px text-center"></i> My Campaigns
+                        </button>
+                        <button class="nav-link text-start rounded-0 py-3 text-dark fw-semibold border-0" id="donations-nav" data-bs-toggle="pill" data-bs-target="#donations-tab" type="button" role="tab" aria-controls="donations-tab" aria-selected="false">
+                            <i class="fa-solid fa-hand-holding-dollar me-3 w-20px text-center text-muted-custom"></i> My Donations
+                        </button>
+                        <button class="nav-link text-start rounded-0 py-3 text-dark fw-semibold border-0" id="settings-nav" data-bs-toggle="pill" data-bs-target="#settings-tab" type="button" role="tab" aria-controls="settings-tab" aria-selected="false">
+                            <i class="fa-solid fa-gear me-3 w-20px text-center text-muted-custom"></i> Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Panel -->
+        <div class="col-lg-9">
+            <div class="tab-content" id="dashboard-tabs-content">
+                <!-- Campaigns Tab -->
+                <div class="tab-pane fade show active" id="campaigns-tab" role="tabpanel" aria-labelledby="campaigns-nav">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">Active Campaigns (<span class="text-secondary">1</span>)</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">+ Create</a>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Iterating through users campaigns here later -->
+                            <div class="row align-items-center border rounded-4 p-3 mb-3 shadow-sm bg-light">
+                                <div class="col-md-2 col-4 mb-3 mb-md-0">
+                                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=200&auto=format&fit=crop" class="img-fluid rounded-3 object-fit-cover shadow-sm" alt="Campaign Thumbnail">
+                                </div>
+                                <div class="col-md-5 col-8">
+                                    <h5 class="fw-bold mb-1"><a href="/campaign/1" class="text-decoration-none text-dark">Emergency Relief for City Animal Shelter</a></h5>
+                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-25 rounded-pill px-2 py-1 small fw-semibold">Active</span>
+                                </div>
+                                <div class="col-md-3 col-6 text-md-center">
+                                    <h4 class="mb-0 fw-bold">₹1,50,000</h4>
+                                    <span class="text-muted-custom small fw-semibold letter-spacing text-uppercase d-block mt-1">Raised of ₹5,00,000</span>
+                                </div>
+                                <div class="col-md-2 col-6 text-end">
+                                    <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px;" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-circle shadow-sm ms-1" style="width: 32px; height: 32px;" title="Stop"><i class="fa-solid fa-power-off"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Donations Tab -->
+                <div class="tab-pane fade" id="donations-tab" role="tabpanel" aria-labelledby="donations-nav">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="fw-bold mb-0">My Donation History</h5>
+                        </div>
+                        <div class="card-body p-4 text-center py-5">
+                            <div class="bg-light rounded-circle shadow-sm d-inline-flex justify-content-center align-items-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fa-solid fa-receipt fs-2 text-muted-custom"></i>
+                            </div>
+                            <h5 class="fw-bold">No Donations Yet</h5>
+                            <p class="text-muted-custom mb-4">You haven't made any contributions yet. Explore campaigns to start making an impact.</p>
+                            <a href="/" class="btn btn-primary-custom rounded-pill fw-bold shadow-sm px-4">Explore Campaigns</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-pane fade" id="settings-tab" role="tabpanel" aria-labelledby="settings-nav">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="fw-bold mb-0">Account Settings</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <h6 class="fw-bold mb-3 border-bottom pb-2">Profile Information</h6>
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold text-muted-custom small">Username</label>
+                                    <input type="text" class="form-control bg-light border-0" value="{{ user.username }}" readonly>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold text-muted-custom small">Email Address</label>
+                                    <input type="email" class="form-control bg-light border-0" value="{{ user.email }}" readonly>
+                                </div>
+                                
+                                <h6 class="fw-bold mb-3 border-bottom pb-2 mt-5">Preferences</h6>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                                    <label class="form-check-label" for="emailNotif">Receive email notifications for campaign updates</label>
+                                </div>
+                                <div class="form-check form-switch mb-4">
+                                    <input class="form-check-input" type="checkbox" id="currencyPref" checked disabled>
+                                    <label class="form-check-label" for="currencyPref">Display Currency in Indian Rupees (₹)</label>
+                                </div>
+                                
+                                <button type="button" class="btn btn-dark rounded-pill shadow-sm px-4 fw-bold">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
