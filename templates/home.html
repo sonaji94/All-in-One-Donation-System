@@ -26,7 +26,7 @@
                 <!-- Simple Trust Metrics -->
                 <div class="row mt-5 pt-4 border-top border-light opacity-75">
                     <div class="col-4">
-                        <h2 class="text-primary-custom">$5M+</h2>
+                        <h2 class="text-primary-custom">₹5Cr+</h2>
                         <span class="text-muted-custom small fw-semibold text-uppercase letter-spacing">Funds Raised</span>
                     </div>
                     <div class="col-4 border-start border-end">
@@ -70,13 +70,13 @@
                         
                         <div class="mb-3">
                             <div class="d-flex justify-content-between fw-bold small text-muted-custom mb-2">
-                                <span class="text-secondary">$15,400 raised</span>
+                                <span class="text-secondary">₹15,400 raised</span>
                                 <span>65%</span>
                             </div>
                             <div class="progress-custom">
                                 <div class="progress-bar-custom" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <div class="text-muted-custom small mt-2 fw-semibold">of $24,000 goal</div>
+                            <div class="text-muted-custom small mt-2 fw-semibold">of ₹24,000 goal</div>
                         </div>
                     </div>
                 </div>
@@ -95,13 +95,13 @@
                         
                         <div class="mb-3">
                             <div class="d-flex justify-content-between fw-bold small text-muted-custom mb-2">
-                                <span class="text-secondary">$4,200 raised</span>
+                                <span class="text-secondary">₹4,200 raised</span>
                                 <span>84%</span>
                             </div>
                             <div class="progress-custom">
                                 <div class="progress-bar-custom" role="progressbar" style="width: 84%;" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <div class="text-muted-custom small mt-2 fw-semibold">of $5,000 goal</div>
+                            <div class="text-muted-custom small mt-2 fw-semibold">of ₹5,000 goal</div>
                         </div>
                     </div>
                 </div>
@@ -120,13 +120,13 @@
                         
                         <div class="mb-3">
                             <div class="d-flex justify-content-between fw-bold small text-muted-custom mb-2">
-                                <span class="text-secondary">$1,500 raised</span>
+                                <span class="text-secondary">₹1,500 raised</span>
                                 <span>30%</span>
                             </div>
                             <div class="progress-custom">
                                 <div class="progress-bar-custom" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <div class="text-muted-custom small mt-2 fw-semibold">of $5,000 goal</div>
+                            <div class="text-muted-custom small mt-2 fw-semibold">of ₹5,000 goal</div>
                         </div>
                     </div>
                 </div>
@@ -137,6 +137,75 @@
         <!-- Mobile Only View All Button -->
         <div class="text-center mt-4 d-md-none">
             <a href="/campaigns" class="btn btn-outline-primary rounded-pill px-4 py-2">View all campaigns</a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section id="categories" class="py-5 bg-light">
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h5 class="text-secondary fw-bold text-uppercase mb-2"><i class="fa-solid fa-list me-2"></i>Explore By</h5>
+            <h2 class="fw-bold fs-1 mb-0">Categories</h2>
+        </div>
+
+        <div class="row g-4 text-center mb-5">
+            <div class="col-6 col-md-3">
+                <a href="{% url 'category_detail' 'medical' %}" class="text-decoration-none text-dark">
+                    <div class="p-4 bg-white rounded shadow-sm hover-lift h-100 border-top border-4 border-danger">
+                        <i class="fa-solid fa-heart text-danger display-4 mb-3"></i>
+                        <h5 class="fw-bold mb-0">Medical</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'category_detail' 'education' %}" class="text-decoration-none text-dark">
+                    <div class="p-4 bg-white rounded shadow-sm hover-lift h-100 border-top border-4 border-primary">
+                        <i class="fa-solid fa-graduation-cap text-primary display-4 mb-3"></i>
+                        <h5 class="fw-bold mb-0">Education</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'category_detail' 'animals' %}" class="text-decoration-none text-dark">
+                    <div class="p-4 bg-white rounded shadow-sm hover-lift h-100 border-top border-4 border-warning">
+                        <i class="fa-solid fa-paw text-warning display-4 mb-3"></i>
+                        <h5 class="fw-bold mb-0">Animals</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'category_detail' 'environment' %}" class="text-decoration-none text-dark">
+                    <div class="p-4 bg-white rounded shadow-sm hover-lift h-100 border-top border-4 border-success">
+                        <i class="fa-solid fa-earth-americas text-success display-4 mb-3"></i>
+                        <h5 class="fw-bold mb-0">Environment</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-5 bg-white">
+    <div class="container my-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="https://images.unsplash.com/photo-1593113565694-c6c7001407cd?q=80&w=800&auto=format&fit=crop" class="img-fluid rounded shadow-lg" alt="About Us">
+            </div>
+            <div class="col-lg-6 px-lg-5">
+                <h5 class="text-secondary fw-bold text-uppercase mb-2"><i class="fa-solid fa-users me-2"></i>About Us</h5>
+                <h2 class="fw-bold fs-1 mb-4">Empowering change, one donation at a time</h2>
+                <p class="lead text-muted-custom mb-4">EduNet Platform connects passionate individuals with causes they care about. We provide a transparent, secure, and user-friendly experience to ensure that your support goes exactly where it's needed.</p>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-3"><i class="fa-solid fa-check text-success me-2"></i> Zero platform fees for organizers</li>
+                    <li class="mb-3"><i class="fa-solid fa-check text-success me-2"></i> 24/7 expert customer support</li>
+                    <li class="mb-3"><i class="fa-solid fa-check text-success me-2"></i> Secure global payment processing</li>
+                </ul>
+                <a href="/register" class="btn btn-primary-custom rounded-pill px-4 py-2">Join our community</a>
+            </div>
         </div>
     </div>
 </section>

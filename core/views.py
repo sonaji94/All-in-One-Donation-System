@@ -13,7 +13,22 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['trending_campaigns'] = Campaign.objects.filter(status=Campaign.Status.ACTIVE).order_by('-raised_amount')[:3]
+        context['trending_campaigns'] = Campaign.objects.filter(
+            status=Campaign.Status.ACTIVE, approved=True
+        ).order_by('-raised_amount')[:3]
+        return context
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = 'category_detail.html'
+    context_object_name = 'category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campaigns'] = self.object.campaigns.filter(
+            status=Campaign.Status.ACTIVE,
+            approved=True
+        ).order_by('-raised_amount')
         return context
 
 class LoginView(AuthLoginView):
