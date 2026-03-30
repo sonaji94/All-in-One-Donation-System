@@ -1,4 +1,11 @@
 from django.contrib import admin
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+# Register your models here.
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 from .models import Category, Campaign, CampaignProof
 
 @admin.register(Category)
@@ -28,4 +35,8 @@ class CampaignProofAdmin(admin.ModelAdmin):
     list_display = ('campaign', 'document_type', 'is_verified')
     list_filter = ('is_verified', 'document_type')
     list_editable = ('is_verified',)
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71

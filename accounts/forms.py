@@ -8,11 +8,17 @@ class CustomUserCreationForm(forms.ModelForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     
+<<<<<<< HEAD
     phone_number = forms.CharField(required=True, max_length=15)
     
     class Meta:
         model = User
         fields = ('email', 'phone_number', 'first_name', 'last_name', 'role', 'password')
+=======
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'role', 'password')
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -32,6 +38,7 @@ class CustomAuthenticationForm(forms.Form):
         super().__init__(*args, **kwargs)
 
     def clean(self):
+<<<<<<< HEAD
         login_id = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
 
@@ -47,11 +54,22 @@ class CustomAuthenticationForm(forms.Form):
             if self.user_cache is None:
                 raise forms.ValidationError(
                     "Invalid Email/Mobile or password."
+=======
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+
+        if email and password:
+            self.user_cache = authenticate(self.request, email=email, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    "Please enter a correct email and password. Note that both fields may be case-sensitive."
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                 )
         return self.cleaned_data
 
     def get_user(self):
         return self.user_cache
+<<<<<<< HEAD
 
 class OTPForgotPasswordForm(forms.Form):
     phone_number = forms.CharField(max_length=15, label="Mobile Number")
@@ -77,3 +95,5 @@ class SetNewPasswordForm(forms.Form):
         if new_password and confirm_password and new_password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71

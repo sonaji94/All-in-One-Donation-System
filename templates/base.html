@@ -35,6 +35,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                        <a class="nav-link fw-semibold px-3 text-dark" href="/">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3 text-dark" href="/#categories">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3 text-dark" href="/#about">About Us</a>
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                         <a class="nav-link fw-semibold px-3 text-dark" href="{% if request.path == '/' %}#trending{% else %}/#trending{% endif %}">Explore</a>
                     </li>
                     <li class="nav-item">
@@ -42,7 +54,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-semibold px-3 text-dark" href="{% if request.path == '/' %}#about{% else %}/#about{% endif %}">About Us</a>
+<<<<<<< HEAD
 
+=======
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
@@ -53,6 +69,10 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                                 <li><a class="dropdown-item fw-semibold py-2" href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line me-2 text-primary"></i> Dashboard</a></li>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                                 {% if user.is_admin_role or user.is_superuser %}
                                 <li><a class="dropdown-item fw-semibold py-2" href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-chart-pie me-2 text-warning"></i> Admin Dashboard</a></li>
                                 {% endif %}
@@ -61,7 +81,17 @@
                                     <form method="post" action="{% url 'logout' %}" class="d-inline">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-item fw-semibold text-danger py-2 border-0 bg-transparent w-100 text-start">
+<<<<<<< HEAD
 
+=======
+=======
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item fw-semibold text-danger py-2 bg-transparent border-0 w-100 text-start">
+>>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                                             <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
                                         </button>
                                     </form>
@@ -70,7 +100,11 @@
                         </div>
                     {% else %}
                         <a href="/login" class="nav-link fw-semibold me-4 text-dark d-none d-lg-block">Log in</a>
+<<<<<<< HEAD
                         <a href="/login" class="btn btn-primary-custom">Start a Fundraiser</a>
+=======
+                        <a href="/register" class="btn btn-primary-custom">Start a Fundraiser</a>
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                     {% endif %}
                 </div>
             </div>

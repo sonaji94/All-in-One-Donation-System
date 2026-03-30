@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+<<<<<<< HEAD
 {% load socialaccount %}
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 
 {% block title %}Sign Up | EduNet NextGen{% endblock %}
 
@@ -41,12 +44,15 @@
                         </div>
                         
                         <div class="mb-3">
+<<<<<<< HEAD
                             <label for="id_phone_number" class="form-label fw-bold">Mobile Number</label>
                             <input type="text" class="form-control form-control-lg bg-light border-0" id="id_phone_number" name="phone_number" required value="{{ form.phone_number.value|default:'' }}" placeholder="e.g. 6363253180">
                             {% if form.phone_number.errors %}<div class="text-danger small">{{ form.phone_number.errors }}</div>{% endif %}
                         </div>
                         
                         <div class="mb-3">
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                             <label class="form-label fw-bold">Account Type</label>
                             <select class="form-select form-select-lg bg-light border-0" id="role" name="role">
                                 <option value="DONOR" {% if form.role.value == 'DONOR' %}selected{% endif %}>I want to donate</option>
@@ -69,6 +75,7 @@
                         </div>
                         
                         <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-4 rounded-pill">Create Account</button>
+<<<<<<< HEAD
                         
                         <div class="position-relative mb-4">
                             <hr class="text-muted-custom">
@@ -78,6 +85,8 @@
                         <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark w-100 py-3 rounded-pill fw-bold mb-3 d-flex align-items-center justify-content-center text-decoration-none">
                             <i class="fa-brands fa-google me-2 text-danger"></i> Continue with Google
                         </a>
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
                     </form>
 
                     <p class="text-center mt-4 mb-0 text-muted-custom">

@@ -31,10 +31,13 @@ class User(AbstractUser):
         ADMIN = 'ADMIN', _('Admin')
 
     email = models.EmailField(_('email address'), unique=True)
+<<<<<<< HEAD
     phone_number = models.CharField(_('phone number'), max_length=15, unique=True, null=True, blank=True)
     otp_code = models.CharField(max_length=6, null=True, blank=True)
     otp_expiry = models.DateTimeField(null=True, blank=True)
     
+=======
+>>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
     role = models.CharField(
         max_length=20, 
         choices=Role.choices, 
