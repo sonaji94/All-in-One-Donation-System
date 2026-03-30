@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Sign In Via Google" %} | EduNet NextGen{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card glass-panel border-0 shadow-lg mt-5">
+                <div class="card-body p-4 p-md-5 text-center">
+                    <!-- Google Brand Icon -->
+                    <div class="mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm p-3 mb-3">
+                            <i class="fa-brands fa-google fs-1 text-danger"></i>
+                        </div>
+                        <h2 class="fw-bold mb-1">{% trans "Sign In Via Google" %}</h2>
+                        <p class="text-muted-custom">
+                            {% blocktrans with provider.name as provider_name %}You are about to sign in using a third-party account from {{ provider_name }}.{% endblocktrans %}
+                        </p>
+                    </div>
+
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary-custom py-3 rounded-pill fw-bold shadow-lg">
+                                {% trans "Continue with Google" %}
+                            </button>
+                            <a href="{% url 'login' %}" class="btn btn-link text-muted-custom text-decoration-none small">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Back to Login
+                            </a>
+                        </div>
+                    </form>
+
+                    <div class="mt-5 p-3 bg-light rounded-4 opacity-75">
+                        <p class="small mb-0 text-muted-custom">
+                            <i class="fa-solid fa-shield-halved me-1"></i> Your information is secured by Google's secure authentication protocol.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
