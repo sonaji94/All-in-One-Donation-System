@@ -1,9 +1,10 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, authentication
 from .models import Donation
 from .serializers import DonationSerializer
 
 class DonationViewSet(viewsets.ModelViewSet):
     serializer_class = DonationSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.BasicAuthentication]
     
     def get_queryset(self):
         user = self.request.user
@@ -14,7 +15,7 @@ class DonationViewSet(viewsets.ModelViewSet):
         return Donation.objects.none()
 
     def get_permissions(self):
-        if self.action in ['create']:
+        if self.action == 'create':
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 

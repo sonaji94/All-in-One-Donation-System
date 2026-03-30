@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, DetailView, FormView, CreateView
+from django.views.generic import TemplateView, DetailView, FormView, CreateView, ListView
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
@@ -6,8 +6,11 @@ from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum, Count
 from accounts.models import User
+from donations.models import Donation
 from campaigns.models import Campaign, Category, CampaignProof
 from campaigns.forms import CampaignForm, CampaignProofForm
+from .models import SupportTicket
+from .forms import SupportTicketForm
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm, OTPForgotPasswordForm, OTPVerifyForm, SetNewPasswordForm
 import random
 from django.utils import timezone
@@ -22,7 +25,13 @@ class HomeView(TemplateView):
         context['trending_campaigns'] = Campaign.objects.filter(
             status=Campaign.Status.ACTIVE, approved=True
         ).order_by('-raised_amount')[:3]
+        context['categories'] = Category.objects.all()[:4]
         return context
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'category_list.html'
+    context_object_name = 'categories'
 
 class CategoryDetailView(DetailView):
     model = Category
@@ -35,6 +44,7 @@ class CategoryDetailView(DetailView):
             status=Campaign.Status.ACTIVE,
             approved=True
         ).order_by('-raised_amount')
+        context['all_categories'] = Category.objects.all()[:4] # Consistent with home page
         return context
 
 class LoginView(AuthLoginView):
@@ -52,7 +62,7 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        login(self.request, self.object)
+        login(self.request, self.object, backend='django.contrib.auth.backends.ModelBackend')
         return response
 
     def dispatch(self, request, *args, **kwargs):
@@ -60,13 +70,57 @@ class RegisterView(CreateView):
             return redirect('dashboard')
         return super().dispatch(request, *args, **kwargs)
 
-class DashboardView(TemplateView):
+class BaseDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['my_campaigns'] = Campaign.objects.filter(owner=self.request.user)
+        user = self.request.user
+        context['my_campaigns'] = Campaign.objects.filter(owner=user)
+        context['my_donations'] = Donation.objects.filter(
+            donor=user, 
+            status=Donation.Status.SUCCESS
+        ).order_by('-created_at')
+        return context
+
+class DashboardView(BaseDashboardView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_tab'] = 'campaigns'
+        return context
+
+class MyDonationsView(BaseDashboardView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_tab'] = 'donations'
+        return context
+
+class MyTicketsView(BaseDashboardView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_tab'] = 'tickets'
+        context['support_tickets'] = SupportTicket.objects.filter(user=self.request.user)
+        context['ticket_form'] = SupportTicketForm()
+        return context
+
+class RaiseTicketView(LoginRequiredMixin, CreateView):
+    model = SupportTicket
+    form_class = SupportTicketForm
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        ticket = form.save()
+        messages.success(self.request, f"Ticket {ticket.ticket_id} has been raised successfully! Our team will review it shortly.")
+        return redirect('my_tickets')
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "There was an error raising your ticket. Please check the details and try again.")
+        return redirect('my_tickets')
+
+class AccountSettingsView(BaseDashboardView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_tab'] = 'settings'
         return context
 
 class CampaignDetailView(DetailView):

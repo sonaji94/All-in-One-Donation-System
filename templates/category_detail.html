@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ category.name }} Campaigns | EduNet NextGen{% endblock %}
+{% block title %}{{ category.name }} Campaigns | All-in-One Donation Platform{% endblock %}
 
 {% block content %}
 <section class="py-5 bg-light">
     <div class="container my-5">
-        <div class="d-flex align-items-center mb-5 border-bottom pb-4">
+        <div class="d-flex align-items-center mb-4 border-bottom pb-4">
             {% if category.icon %}
             <img src="{{ category.icon.url }}" alt="{{ category.name }}" style="width: 64px; height: 64px; object-fit: contain;" class="me-4 drop-shadow">
             {% else %}
@@ -14,7 +14,7 @@
             {% endif %}
             <div>
                 <h5 class="text-secondary fw-bold text-uppercase mb-1">Explore Category</h5>
-                <h1 class="fw-bolder display-5 mb-0 d-flex align-items-center">{{ category.name }} Seekers</h1>
+                <h1 class="fw-bolder display-5 mb-0 d-flex align-items-center">{{ category.name }}</h1>
             </div>
         </div>
 

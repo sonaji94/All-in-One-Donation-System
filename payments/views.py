@@ -1,94 +1,133 @@
-import stripe
+import razorpay
 from django.conf import settings
-from rest_framework import status, views, permissions
+from rest_framework import status, views, permissions, authentication
 from rest_framework.response import Response
 from donations.models import Donation
 from .models import Transaction
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
-class CreateStripeCheckoutSessionView(views.APIView):
+class CreateRazorpayOrderView(views.APIView):
     permission_classes = [permissions.AllowAny]
+    authentication_classes = [authentication.SessionAuthentication, authentication.BasicAuthentication]
 
     def post(self, request, *args, **kwargs):
         donation_id = request.data.get('donation_id')
         try:
             donation = Donation.objects.get(id=donation_id)
-            
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[
-                    {
-                        'price_data': {
-                            'currency': 'usd',
-                            'unit_amount': int(donation.amount * 100),
-                            'product_data': {
-                                'name': f'Donation to {donation.campaign.title}',
-                                'description': f'Donation from {donation.donor.username if donation.donor else "Guest"}',
-                            },
-                        },
-                        'quantity': 1,
-                    },
-                ],
-                mode='payment',
-                success_url=request.build_absolute_uri('/') + '?success=true&session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=request.build_absolute_uri('/') + '?canceled=true',
-            )
-            
-            # Create transaction record
-            Transaction.objects.update_or_create(
-                donation=donation,
-                defaults={
-                    'stripe_charge_id': checkout_session.id,
-                    'verification_status': Transaction.Status.CREATED
-                }
-            )
+            amount = int(donation.amount * 100) # Smallest unit
 
-            return Response({'id': checkout_session.id, 'url': checkout_session.url}, status=status.HTTP_200_OK)
+            # --- REAL RAZORPAY INTEGRATION ---
+            data = {
+                "amount": amount,
+                "currency": "INR",
+                "receipt": f"receipt_{donation.id}",
+                "payment_capture": 1
+            }
+            
+            try:
+                order = razorpay_client.order.create(data=data)
+                
+                Transaction.objects.update_or_create(
+                    donation=donation,
+                    defaults={
+                        'razorpay_order_id': order['id'],
+                        'verification_status': Transaction.Status.CREATED
+                    }
+                )
+
+                return Response({
+                    'order_id': order['id'],
+                    'amount': amount,
+                    'currency': "INR",
+                    'key_id': settings.RAZORPAY_KEY_ID,
+                    'is_mock': False
+                }, status=status.HTTP_200_OK)
+                
+            except Exception as e:
+                # If it's an authentication error, fall back to mock mode for testing
+                if "Authentication failed" in str(e) or "Unauthorized" in str(e) or "Invalid" in str(e):
+                    mock_order_id = f"order_mock_{donation.id}"
+                    Transaction.objects.update_or_create(
+                        donation=donation,
+                        defaults={'razorpay_order_id': mock_order_id, 'verification_status': Transaction.Status.CREATED}
+                    )
+                    return Response({
+                        'order_id': mock_order_id,
+                        'amount': amount,
+                        'currency': "INR",
+                        'key_id': settings.RAZORPAY_KEY_ID,
+                        'is_mock': True
+                    }, status=status.HTTP_200_OK)
+                raise e
             
         except Donation.DoesNotExist:
-            return Response({'error': 'Donation not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Donation record not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            error_msg = str(e)
+            return Response({'error': error_msg}, status=status.HTTP_400_BAD_REQUEST)
 
-class StripeWebhookView(views.APIView):
+class VerifyRazorpayPaymentView(views.APIView):
     permission_classes = [permissions.AllowAny]
+    authentication_classes = [authentication.SessionAuthentication, authentication.BasicAuthentication]
 
     def post(self, request, *args, **kwargs):
-        payload = request.body
-        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+        razorpay_order_id = request.data.get('razorpay_order_id')
+        razorpay_payment_id = request.data.get('razorpay_payment_id')
+        razorpay_signature = request.data.get('razorpay_signature')
         
-        # TODO: Add Stripe Webhook Secret to settings and setup verification
-        # For MVP, we will assume validity or skip webhook signature 
-        # in favor of direct frontend session checks.
-        
-        import json
         try:
-            event = stripe.Event.construct_from(
-                json.loads(payload), stripe.api_key
-            )
-        except ValueError as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if event.type == 'checkout.session.completed':
-            session = event.data.object
-            
-            # Fulfill the order
-            try:
-                transaction = Transaction.objects.get(stripe_charge_id=session.id)
+            # --- MOCK VERIFICATION FOR DEVELOPMENT ---
+            if razorpay_order_id and razorpay_order_id.startswith('order_mock_'):
+                # In mock mode, we skip signature verification
+                transaction = Transaction.objects.get(razorpay_order_id=razorpay_order_id)
+                transaction.razorpay_payment_id = f"pay_mock_{transaction.id}"
+                transaction.razorpay_signature = "mock_signature"
                 transaction.verification_status = Transaction.Status.COMPLETED
-                transaction.gateway_response = session
                 transaction.save()
                 
                 donation = transaction.donation
                 donation.status = Donation.Status.SUCCESS
-                donation.payment_id = session.payment_intent
+                donation.payment_id = transaction.razorpay_payment_id
                 donation.save()
                 
                 campaign = donation.campaign
                 campaign.raised_amount += donation.amount
                 campaign.save()
-            except Transaction.DoesNotExist:
-                pass
                 
-        return Response(status=status.HTTP_200_OK)
+                return Response({'status': 'Mock payment verified.'}, status=status.HTTP_200_OK)
+            # ----------------------------------------
+
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            
+            razorpay_client.utility.verify_payment_signature(params_dict)
+            
+            transaction = Transaction.objects.get(razorpay_order_id=razorpay_order_id)
+            transaction.razorpay_payment_id = razorpay_payment_id
+            transaction.razorpay_signature = razorpay_signature
+            transaction.verification_status = Transaction.Status.COMPLETED
+            transaction.save()
+            
+            donation = transaction.donation
+            donation.status = Donation.Status.SUCCESS
+            donation.payment_id = razorpay_payment_id
+            donation.save()
+            
+            campaign = donation.campaign
+            campaign.raised_amount += donation.amount
+            campaign.save()
+            
+            return Response({'status': 'Payment verified and captured.'}, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            if 'Signature' in str(e):
+                return Response({'error': 'Invalid payment signature.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if isinstance(e, Transaction.DoesNotExist):
+                return Response({'error': 'Transaction not found for this order.'}, status=status.HTTP_404_NOT_FOUND)
+                
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

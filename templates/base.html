@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EduNet NextGen - The Ultimate Platform for Empowering Campaigns.">
-    <title>{% block title %}EduNet NextGen Donation Platform{% endblock %}</title>
+    <meta name="description" content="All-in-One Donation Platform - Empowering campaigns through secure and transparent fundraising.">
+    <title>{% block title %}All-in-One Donation Platform{% endblock %}</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +27,7 @@
     <nav class="navbar navbar-expand-lg glass-nav sticky-top">
         <div class="container py-2">
             <a class="navbar-brand fw-bold mb-0 h1 text-primary-custom" href="/">
-                <i class="fa-solid fa-hand-holding-heart text-secondary me-2"></i>EduNet Platform
+                <i class="fa-solid fa-hand-holding-heart text-secondary me-2"></i>All-in-One Donation Platform
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -35,24 +35,31 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 text-dark" href="{% if request.path == '/' %}#trending{% else %}/#trending{% endif %}">Explore</a>
+                        <a class="nav-link fw-semibold px-3 {% if request.path == '/' %}text-primary-custom{% else %}text-dark{% endif %}" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 text-dark" href="{% if request.path == '/' %}#categories{% else %}/#categories{% endif %}">Categories</a>
+                        <a class="nav-link fw-semibold px-3 text-dark" href="{% url 'category_list' %}">Categories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-semibold px-3 text-dark" href="{% if request.path == '/' %}#about{% else %}/#about{% endif %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-3 text-dark" href="{% url 'my_tickets' %}">Customer Support</a>
                     </li>
                 </ul>
                 <div class="d-flex align-items-center">
                     {% if user.is_authenticated %}
                         <div class="dropdown">
                             <button class="btn btn-outline-dark fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-regular fa-user me-2"></i> {{ user.username }}
+                                <i class="fa-regular fa-user me-2"></i> {{ user.get_full_name|default:user.username }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line me-2 text-primary"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line me-2 text-primary-custom"></i> Dashboard</a></li>
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'account_settings' %}"><i class="fa-solid fa-user-gear me-2 text-secondary"></i> Account</a></li>
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'my_donations' %}"><i class="fa-solid fa-hand-holding-dollar me-2 text-success"></i> My Donations</a></li>
+                                <li><a class="dropdown-item fw-semibold py-2" href="{% url 'my_tickets' %}"><i class="fa-solid fa-ticket me-2 text-info"></i> Tickets</a></li>
                                 {% if user.is_admin_role or user.is_superuser %}
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item fw-semibold py-2" href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-chart-pie me-2 text-warning"></i> Admin Dashboard</a></li>
                                 {% endif %}
                                 <li><hr class="dropdown-divider"></li>
@@ -85,6 +92,13 @@
                 </div>
             {% endfor %}
         {% endif %}
+        
+        <!-- URL Success message -->
+        <div id="url-success-alert" class="alert alert-success alert-dismissible fade show shadow-sm d-none" role="alert">
+            <h4 class="alert-heading fw-bold"><i class="fa-solid fa-circle-check me-2"></i> Success!</h4>
+            <p class="mb-0">Your action has been completed successfully. Thank you for your support!</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -97,7 +111,7 @@
         <div class="container">
             <div class="row gx-5">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-hand-holding-heart text-secondary me-2"></i> EduNet Platform</h5>
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-hand-holding-heart text-secondary me-2"></i> All-in-One Donation Platform</h5>
                     <p class="text-white-50">Empowering individuals, charities, and communities to raise funds securely and efficiently across the globe.</p>
                 </div>
                 <div class="col-md-2 mb-4">
@@ -126,7 +140,7 @@
             </div>
             <hr class="border-secondary mt-2 mb-4">
             <div class="d-flex justify-content-between align-items-center">
-                <span class="text-white-50">&copy; 2026 EduNet Donation Platform. All rights reserved.</span>
+                <span class="text-white-50">&copy; 2026 All-in-One Donation Platform. All rights reserved.</span>
                 <div>
                     <a href="#" class="text-white-50 text-decoration-none me-3 h5"><i class="fa-brands fa-facebook"></i></a>
                     <a href="#" class="text-white-50 text-decoration-none me-3 h5"><i class="fa-brands fa-twitter"></i></a>
@@ -141,6 +155,21 @@
     
     <!-- Alpine JS for interactions -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                const alertElement = document.getElementById('url-success-alert');
+                if (alertElement) {
+                    alertElement.classList.remove('d-none');
+                    // Optional: remove parameter from URL without reload
+                    const newUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, newUrl);
+                }
+            }
+        });
+    </script>
     
     {% block scripts %}{% endblock %}
 </body>

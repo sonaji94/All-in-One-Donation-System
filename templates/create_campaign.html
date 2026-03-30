@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Start a Campaign | EduNet NextGen{% endblock %}
+{% block title %}Start a Campaign | All-in-One Donation Platform{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -12,7 +12,7 @@
                     <div class="text-center mb-4">
                         <i class="fa-solid fa-parachute-box fs-1 text-primary mb-3"></i>
                         <h2 class="fw-bold mb-1">Start a Fundraising Campaign</h2>
-                        <p class="text-muted-custom">Provide details, your payment QR code, and verification documents.</p>
+                        <p class="text-muted-custom">Provide details and verification documents to start your impact.</p>
                     </div>
 
                     <form id="createCampaignForm" method="POST" action="{% url 'create_campaign' %}" enctype="multipart/form-data">
@@ -64,15 +64,7 @@
                             <input class="form-control bg-light border-0" type="file" name="image" accept="image/*">
                         </div>
 
-                        <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">2. Payment details (QR Code)</h5>
-                        <p class="small text-muted-custom">Upload your UPI or Bank QR code so that donors can pay you directly if needed natively.</p>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Payment QR Code</label>
-                            <input class="form-control bg-light border-0" type="file" name="payment_qr_code" accept="image/*">
-                            {% if form.payment_qr_code.errors %}<div class="text-danger small">{{ form.payment_qr_code.errors }}</div>{% endif %}
-                        </div>
-
-                        <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">3. Verification Proofs</h5>
+                        <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">2. Verification Proofs</h5>
                         <p class="small text-muted-custom">To establish trust, provide a medical estimate, ID proof, or other documentation. Internal use and donor verification only.</p>
                         <div class="row">
                             <div class="col-md-6 mb-3">

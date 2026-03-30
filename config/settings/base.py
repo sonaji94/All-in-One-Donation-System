@@ -193,9 +193,9 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# Stripe API Keys (Dummy defaults for now)
-STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY', default='pk_test_XXX')
-STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='sk_test_XXX')
+# Razorpay API Keys (Dummy defaults for now)
+RAZORPAY_KEY_ID = env('RAZORPAY_KEY_ID', default='rzp_test_XXX')
+RAZORPAY_KEY_SECRET = env('RAZORPAY_KEY_SECRET', default='YYY')
 
 # Celery Configuration
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379/0')

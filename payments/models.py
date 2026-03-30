@@ -20,6 +20,10 @@ class Transaction(models.Model):
     stripe_charge_id = models.CharField(max_length=255, blank=True)
     stripe_payment_intent_id = models.CharField(max_length=255, blank=True)
     
+    razorpay_order_id = models.CharField(max_length=255, blank=True)
+    razorpay_payment_id = models.CharField(max_length=255, blank=True)
+    razorpay_signature = models.CharField(max_length=500, blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

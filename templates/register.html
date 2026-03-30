@@ -2,7 +2,7 @@
 {% load static %}
 {% load socialaccount %}
 
-{% block title %}Sign Up | EduNet NextGen{% endblock %}
+{% block title %}Sign Up | All-in-One Donation Platform{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -47,6 +47,28 @@
                         </div>
                         
 
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block mb-3">I want to join as a...</label>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <input type="radio" name="role" id="roleDonor" value="DONOR" class="btn-check" checked>
+                                    <label class="btn btn-outline-primary w-100 py-4 rounded-4 shadow-sm border-2 d-flex flex-column align-items-center justify-content-center h-100" for="roleDonor">
+                                        <i class="fa-solid fa-hand-holding-heart mb-3 fs-2 opacity-75"></i>
+                                        <span class="fw-bold d-block">Donor</span>
+                                        <small class="opacity-75 d-block mt-1 lh-sm">Supporting causes</small>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="role" id="roleOwner" value="OWNER" class="btn-check">
+                                    <label class="btn btn-outline-primary w-100 py-4 rounded-4 shadow-sm border-2 d-flex flex-column align-items-center justify-content-center h-100" for="roleOwner">
+                                        <i class="fa-solid fa-bullhorn mb-3 fs-2 opacity-75"></i>
+                                        <span class="fw-bold d-block">Campaigner</span>
+                                        <small class="opacity-75 d-block mt-1 lh-sm">Raising funds</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="mb-4">
                             <label for="password" class="form-label fw-bold">Password</label>
