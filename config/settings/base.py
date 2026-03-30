@@ -49,10 +49,7 @@ THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-<<<<<<< HEAD
     'allauth.socialaccount.providers.google',
-=======
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
     'drf_spectacular',
     'django_filters',
 ]
@@ -116,7 +113,6 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-<<<<<<< HEAD
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -145,9 +141,6 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
-=======
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

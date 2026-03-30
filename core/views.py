@@ -3,7 +3,6 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-<<<<<<< HEAD
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Sum, Count
 from accounts.models import User
@@ -14,30 +13,12 @@ import random
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-=======
-<<<<<<< HEAD
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Sum, Count
-from accounts.models import User
-=======
-from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
-from campaigns.models import Campaign, Category, CampaignProof
-from campaigns.forms import CampaignForm, CampaignProofForm
-from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 
 class HomeView(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-        context['trending_campaigns'] = Campaign.objects.filter(status=Campaign.Status.ACTIVE).order_by('-raised_amount')[:3]
-=======
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
         context['trending_campaigns'] = Campaign.objects.filter(
             status=Campaign.Status.ACTIVE, approved=True
         ).order_by('-raised_amount')[:3]
@@ -54,15 +35,8 @@ class CategoryDetailView(DetailView):
             status=Campaign.Status.ACTIVE,
             approved=True
         ).order_by('-raised_amount')
-<<<<<<< HEAD
         return context
 
-
-=======
->>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
-        return context
-
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 class LoginView(AuthLoginView):
     template_name = 'login.html'
     authentication_form = CustomAuthenticationForm
@@ -129,10 +103,6 @@ class CreateCampaignView(LoginRequiredMixin, CreateView):
 
             return redirect('campaign_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
 
 class AdminDashboardView(UserPassesTestMixin, TemplateView):
     template_name = 'admin/dashboard.html'
@@ -155,7 +125,6 @@ class AdminDashboardView(UserPassesTestMixin, TemplateView):
         ).order_by('-total_raised')
         
         return context
-<<<<<<< HEAD
 
 class ForgotPasswordRequestView(FormView):
     template_name = 'accounts/password_reset_request.html'
@@ -227,7 +196,3 @@ class ForgotPasswordResetView(FormView):
         except User.DoesNotExist:
             return redirect('password_reset_request')
 
-=======
-=======
->>>>>>> c7c1a19dd373c1bfd37bb625fc49b976f6ae5852
->>>>>>> 11b04389547943f6cd409ae4f74ccc304e0b5e71
